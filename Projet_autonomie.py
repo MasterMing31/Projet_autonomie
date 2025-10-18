@@ -7,8 +7,7 @@ Date: 18/10/2025
 """
 
 Test = None
-g = 1
-
+g = None
 
 
 
