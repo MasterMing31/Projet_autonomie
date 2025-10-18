@@ -8,10 +8,9 @@ Date: 18/10/2025
 
 Test = None
 g = None
-def function():
-    pass
 
 
+"je veux faire un test"
 
 
 
