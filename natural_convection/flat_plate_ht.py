@@ -113,12 +113,20 @@ class FlatPlateHT(object):
         """
 
         """
+        Ha = 1
+        Re = 1
+        Gr = 1
+        Ec = 1
+        X = 1
+        a = 1
+        lambd = 1
+
         df_deta = np.zeros(5, dtype=float)
         df_deta[0] = f[1]
         df_deta[1] = f[2]
-        df_deta[2] = -0.75 * f[0] * f[2] + 0.5 * f[1]**2 -f[3]
+        df_deta[2] = -f[0]*f[2] +2*f[1]**2 - 2*(Ha**2)/Re * np.exp(-X) * f[1] + 2*Gr*np.exp((a/2 - 2)*X) * f[3]
         df_deta[3] = f[4]
-        df_deta[4] = -0.75 * self.Pr * f[0] * f[4]
+        df_deta[4] = self.Pr * (-f[0]*f[4] + a*f[1]*f[3] -np.exp(X*(1-a/2)) * Ec*(2*Ha**2/Re * f[1]**2 + f[2]**2*np.exp(X)) - 2 * lambd * np.exp(-X) * f[3])
 
         return df_deta
 
