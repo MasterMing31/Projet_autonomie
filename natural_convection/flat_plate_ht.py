@@ -64,8 +64,6 @@ class FlatPlateHT(object):
         self.eta = np.linspace(0, self.eta_max, self.npt)
         self.deta_min = self.eta[1] - self.eta[0]
 
-
-
     def solve(self):
         """
         Solves the heat transfer around a flat plate by using the Nelder-Mead simplex optimization algorithm
@@ -93,8 +91,8 @@ class FlatPlateHT(object):
         Computes the error squared used later for the optimization
         """
 
-        self.eta,self.f = self.solution(f2_f4_init)
-        error_squared = self.f[1,-1]**2 + self.f[3,-1]**2
+        self.eta, self.f = self.solution(f2_f4_init)
+        error_squared = self.f[1, -1]**2 + self.f[3, -1]**2
 
         return error_squared
 
@@ -103,23 +101,22 @@ class FlatPlateHT(object):
         """
         Gets the solution of the ODE
         """
-        f_init = np.array([0, 0, float(f2_f4_init[0]),1,float(f2_f4_init[1])], dtype=object)  # f(0), f'(0), f''(0),g(0) and g'(0)
+        f_init = np.array([0, 1, float(f2_f4_init[0]), 1, float(f2_f4_init[1])], dtype=object)  # f(0), f'(0), f''(0),g(0) and g'(0)
+        sol = integrate.solve_ivp(self.ode, t_span=(self.eta[0], self.eta[-1]), t_eval=self.eta, y0=f_init, method=self.method)
 
-        sol = integrate.solve_ivp(self.ode,t_span=(self.eta[0],self.eta[-1]),t_eval=self.eta,y0=f_init,method=self.method)
-
-        return sol.t, sol.y   # eta, f
+        return sol.t, sol.y   
 
     def ode(self, eta, f):
         """
 
         """
-        Ha = 1
+        Ha = 0
         Re = 1
-        Gr = 1
-        Ec = 1
+        Gr = 0
+        Ec = 0
         X = 1
-        a = 1
-        lambd = 1
+        a = -0.5
+        lambd = 0
 
         df_deta = np.zeros(5, dtype=float)
         df_deta[0] = f[1]
