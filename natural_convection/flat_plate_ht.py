@@ -45,7 +45,7 @@ class FlatPlateHT(object):
 
             self.f2_f4_init_guess = np.array([df2, dg])
         else:
-            self.f2_f4_init_guess = np.array([0.9081, -0.4009])
+            self.f2_f4_init_guess = np.array([1, -1])
 
         self.ratio = 10.            # to set the minimum step for a geometric grid
         # variables declaration
@@ -127,27 +127,27 @@ class FlatPlateHT(object):
 
         return df_deta
 
-    def initial_guess(self):
-        """
-        Proceeds to do a sweep over different Pr values in order to find the right initial guesses for f''(0) and g'(0)
+    # def initial_guess(self):
+    #     """
+    #     Proceeds to do a sweep over different Pr values in order to find the right initial guesses for f''(0) and g'(0)
 
-        """
-        filename = __DIROUT__ + "flat_plate_guesses_{:01d}.dat".format(1)
-        print(filename)
-        var = "#     Pr           f''(0)         g'(0)"
-        header = "# Flat Plate Heat Transfer initial guesses  \n" + var + "\n"
-        with open(filename, 'w') as f:
-            f.write(header)
-            form = " {:12.5e} " * 3 + "\n"
+    #     """
+    #     filename = __DIROUT__ + "flat_plate_guesses_{:01d}.dat".format(1)
+    #     print(filename)
+    #     var = "#     Pr           f''(0)         g'(0)"
+    #     header = "# Flat Plate Heat Transfer initial guesses  \n" + var + "\n"
+    #     with open(filename, 'w') as f:
+    #         f.write(header)
+    #         form = " {:12.5e} " * 3 + "\n"
 
-            for i, Pr_value in range(1, 11):
-                self.Pr = Pr_value
-                self.solve()
-                new_guess = [self.f[2,0],self.f[4,0]]
-                f.write(form.format(self.Pr, self.f[2, 0], self.f[4, 0]))
-                f.flush()
-                self.f2_f4_init_guess = new_guess
-            f.close()
+    #         for i, Pr_value in range(1, 11):
+    #             self.Pr = Pr_value
+    #             self.solve()
+    #             new_guess = [self.f[2,0],self.f[4,0]]
+    #             f.write(form.format(self.Pr, self.f[2, 0], self.f[4, 0]))
+    #             f.flush()
+    #             self.f2_f4_init_guess = new_guess
+    #         f.close()
 
 
     def display_profiles(self):

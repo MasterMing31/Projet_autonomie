@@ -19,16 +19,18 @@ def task_0():
     This task takes a lot of time to compute. For later tasks use data from the file.
 
     """
-    parameters = dict(eta_max=20,
+    parameters = dict(eta_max=7,
                    npt=201,
                    Prandtl=1,
                    method=1,
                    grid="geometric",
                    verbose=False,
-                   plot=False
+                   plot=True
                    )
     s = FlatPlateHT(parameters)
-    s.initial_guess()
+    # s.initial_guess()
+    s.solve()
+    
     set_info("normal end of execution")
 
 def task_1():
@@ -48,7 +50,6 @@ def task_1():
     s.display_profiles()
 
     set_info("normal end of execution")
-
 
 def task_2():
     """
@@ -71,5 +72,5 @@ def task_2():
 task_dispatch = {0: task_0,
                  1: task_1,
                  2: task_2}
-task = 1
+task = 0
 task_dispatch.get(task, lambda: print("Invalid task"))()
