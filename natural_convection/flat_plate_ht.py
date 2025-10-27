@@ -21,6 +21,14 @@ class FlatPlateHT(object):
         self.eta_max = par['eta_max']
         self.npt = par["npt"]
         self.Pr = par["Prandtl"]
+        self.a = par["a"]
+        self.X = par["X"]
+        self.Ha = par["Hartman"]
+        self.Ec = par["Eckert"]
+        self.Gr = par["Grashof"]
+        self.lbda = par["Lambda"]
+        self.Re = par["Reynolds"]
+
         if par["method"] >= 5:
             raise ValueError("parameter 'method'  must be lower than  5")
         self.method = method_available[par["method"]]
@@ -84,6 +92,7 @@ class FlatPlateHT(object):
         self.eta, self.f = self.solution(self.f2_f4_init)
         if self.plot:
             self.display_profiles()
+            self.save_profiles()
 
 
     def error_squared(self, f2_f4_init):
@@ -110,20 +119,12 @@ class FlatPlateHT(object):
         """
 
         """
-        Ha = 0
-        Re = 1
-        Gr = 0
-        Ec = 0
-        X = 1
-        a = -0.5
-        lambd = 0
-
         df_deta = np.zeros(5, dtype=float)
         df_deta[0] = f[1]
         df_deta[1] = f[2]
-        df_deta[2] = -f[0]*f[2] +2*f[1]**2 - 2*(Ha**2)/Re * np.exp(-X) * f[1] + 2*Gr*np.exp((a/2 - 2)*X) * f[3]
+        df_deta[2] = -f[0]*f[2] +2*f[1]**2 - 2*(self.Ha**2)/self.Re * np.exp(-self.X) * f[1] + 2*self.Gr*np.exp((self.a/2 - 2)*self.X) * f[3]
         df_deta[3] = f[4]
-        df_deta[4] = self.Pr * (-f[0]*f[4] + a*f[1]*f[3] -np.exp(X*(1-a/2)) * Ec*(2*Ha**2/Re * f[1]**2 + f[2]**2*np.exp(X)) - 2 * lambd * np.exp(-X) * f[3])
+        df_deta[4] = self.Pr * (-f[0]*f[4] + self.a*f[1]*f[3] -np.exp(self.X*(1-self.a/2)) * self.Ec*(2*self.Ha**2/self.Re * f[1]**2 + f[2]**2*np.exp(self.X)) - 2 * self.lbda * np.exp(-self.X) * f[3])
 
         return df_deta
 
@@ -166,3 +167,18 @@ class FlatPlateHT(object):
         ax[1].set_ylabel("g")
         ax[1].grid()
         plt.show()
+
+    def save_profiles(self):
+        """ Save in ascii format f, f', f'', theta, dtheta"""
+        filename = __DIROUT__ + "profile_{:01d}.dat".format(self.Pr)
+        print(filename)
+        var = "#	   eta            f              f'           f''          theta         dtheta"
+        header = ("#  Mixed convection heat transfer in the boundary layers on an exponentially stretching surface"
+                  " with magnetic field   \n") + var + "\n"
+        with open(filename, 'w') as f:
+            f.write(header)
+            form = " {:12.5e} " * 6  + "\n"
+            for k in range(len(self.eta)):
+                f.write(form.format(self.eta[k], self.f[0, k], self.f[1, k], self.f[2,k], self.f[3,k],
+                                    self.f[4,k]))
+            f.close()

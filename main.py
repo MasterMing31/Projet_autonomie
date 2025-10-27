@@ -21,14 +21,13 @@ def task_0():
     """
     parameters = dict(eta_max=7,
                    npt=201,
-                   Prandtl=1,
+                   Prandtl=1,a=0,X=1,Hartman=0,Eckert=0,Grashof=0,Lambda=0,Reynolds=1,
                    method=1,
                    grid="geometric",
                    verbose=False,
                    plot=True
                    )
     s = FlatPlateHT(parameters)
-    # s.initial_guess()
     s.solve()
     
     set_info("normal end of execution")
