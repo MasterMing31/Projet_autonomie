@@ -19,6 +19,7 @@ class FlatPlateHT(object):
         """
         method_available = ("BDF", "RK45", "RK23", "DOP853", "LSODA")
         self.eta_max = par['eta_max']
+        self.grid = par["grid"]
         self.npt = par["npt"]
         self.Pr = par["Prandtl"]
         self.a = par["a"]
@@ -53,7 +54,7 @@ class FlatPlateHT(object):
 
             self.f2_f4_init_guess = np.array([df2, dg])
         else:
-            self.f2_f4_init_guess = np.array([1, -1])
+            self.f2_f4_init_guess = np.array([-1.30021114, -0.64689448])
 
         self.ratio = 10.            # to set the minimum step for a geometric grid
         # variables declaration
@@ -68,15 +69,15 @@ class FlatPlateHT(object):
         """
         grid
         """
+        if self.grid == "geometric":
+            self.deta_min = self.eta_max / (self.ratio * (self.npt - 1))
+            self.eta = np.hstack((0, np.geomspace(self.deta_min, self.eta_max, self.npt-1)))
+            self.eta[-1] = self.eta_max   # necessary because of the round-off error
+        else:
+            self.eta = np.linspace(0, self.eta_max, self.npt)
+            self.deta_min = self.eta[1] - self.eta[0]
 
-        self.eta = np.linspace(0, self.eta_max, self.npt)
-        self.deta_min = self.eta[1] - self.eta[0]
-
-    def solve(self):
-        """
-        Solves the heat transfer around a flat plate by using the Nelder-Mead simplex optimization algorithm
-
-        """
+    def guess_optimization(self):
         self.set_grid()
 
         result = optimize.minimize(fun=self.error_squared, x0=self.f2_f4_init_guess,
@@ -88,8 +89,16 @@ class FlatPlateHT(object):
             print("f''_init     : %f" % self.f2_f4_init)
             print("Residual     : %e" % result.fun)
 
+    def solve(self):
+        """
+        Solves the heat transfer around a flat plate by using the Nelder-Mead simplex optimization algorithm
+
+        """
+        self.guess_optimization()
+
         # Calculate the final solution
         self.eta, self.f = self.solution(self.f2_f4_init)
+        print(self.eta[-1])
         if self.plot:
             self.display_profiles()
             self.save_profiles()
@@ -128,27 +137,27 @@ class FlatPlateHT(object):
 
         return df_deta
 
-    # def initial_guess(self):
-    #     """
-    #     Proceeds to do a sweep over different Pr values in order to find the right initial guesses for f''(0) and g'(0)
+    def initial_guess(self):
+         """
+         Proceeds to do a sweep over different Pr values in order to find the right initial guesses for f''(0) and g'(0)
 
-    #     """
-    #     filename = __DIROUT__ + "flat_plate_guesses_{:01d}.dat".format(1)
-    #     print(filename)
-    #     var = "#     Pr           f''(0)         g'(0)"
-    #     header = "# Flat Plate Heat Transfer initial guesses  \n" + var + "\n"
-    #     with open(filename, 'w') as f:
-    #         f.write(header)
-    #         form = " {:12.5e} " * 3 + "\n"
+         """
+         filename = __DIROUT__ + "flat_plate_guesses_{:01d}.dat".format(1)
+         print(filename)
+         var = "#     Pr           f''(0)         g'(0)"
+         header = "# Flat Plate Heat Transfer initial guesses  \n" + var + "\n"
+         with open(filename, 'w') as f:
+             f.write(header)
+             form = " {:12.5e} " * 3 + "\n"
 
-    #         for i, Pr_value in range(1, 11):
-    #             self.Pr = Pr_value
-    #             self.solve()
-    #             new_guess = [self.f[2,0],self.f[4,0]]
-    #             f.write(form.format(self.Pr, self.f[2, 0], self.f[4, 0]))
-    #             f.flush()
-    #             self.f2_f4_init_guess = new_guess
-    #         f.close()
+             for i, Pr_value in range(1, 11):
+                 self.Pr = Pr_value
+                 self.solve()
+                 new_guess = [self.f[2,0],self.f[4,0]]
+                 f.write(form.format(self.Pr, self.f[2, 0], self.f[4, 0]))
+                 f.flush()
+                 self.f2_f4_init_guess = new_guess
+             f.close()
 
 
     def display_profiles(self):
