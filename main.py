@@ -19,19 +19,24 @@ def task_0():
     This task takes a lot of time to compute. For later tasks use data from the file.
 
     """
-    parameters = dict(eta_max=10,
+    parameters = dict(eta_max=15,
                    npt=201,
-                   Prandtl=1,a=0,X=1,Hartman=0,Eckert=0,Grashof=0,Lambda=0,Reynolds=1,
+                   Prandtl=10,
+                   a=-1.5,
+                   X=1,
+                   Hartman=0,
+                   Eckert=0,
+                   Grashof=0,
+                   Lambda=0,
+                   Reynolds=1,
                    method=1,
                    grid="geometric",
                    verbose=False,
-                   plot=True
+                   plot=False
                    )
     s = FlatPlateHT(parameters)
-
-    s.guess_optimization()
-    print(s.f2_f4_init)
     s.solve()
+    print(s.f2_f4_init)
 
     set_info("normal end of execution")
 
