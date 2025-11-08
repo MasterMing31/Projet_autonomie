@@ -114,7 +114,6 @@ class FlatPlateHT(object):
 
         return error_squared
 
-
     def solution(self, f2_f4_init):
         """
         Gets the solution of the ODE
@@ -133,7 +132,11 @@ class FlatPlateHT(object):
         df_deta[1] = f[2]
         df_deta[2] = -f[0]*f[2] +2*f[1]**2 - 2*(self.Ha**2)/self.Re * np.exp(-self.X) * f[1] + 2*self.Gr*np.exp((self.a/2 - 2)*self.X) * f[3]
         df_deta[3] = f[4]
-        df_deta[4] = self.Pr * (-f[0]*f[4] + self.a*f[1]*f[3] -np.exp(self.X*(1-self.a/2)) * self.Ec*(2*self.Ha**2/self.Re * f[1]**2 + f[2]**2*np.exp(self.X)) - 2 * self.lbda * np.exp(-self.X) * f[3])
+        df_deta[4] = self.Pr * (
+            -f[0]*f[4] 
+            + self.a*f[1]*f[3] 
+            - np.exp(self.X*(1-self.a/2)) * self.Ec*(2*self.Ha**2/self.Re * f[1]**2 + f[2]**2*np.exp(self.X)) 
+            - 2 * self.lbda * np.exp(-self.X) * f[3])
 
         return df_deta
 
@@ -164,22 +167,22 @@ class FlatPlateHT(object):
         """
         show the results of the ODE
         """
-        fig, ax = plt.subplots(1, 2,figsize=(8, 7))
+        fig, ax = plt.subplots(figsize=(6, 5))
         fig.suptitle(f"Velocity and Temperature profiles (Pr = {self.Pr})")
-        ax[0].plot(self.eta, self.f[1, :])
-        ax[0].set_xlabel(r"$\eta$")
-        ax[0].set_ylabel("f '")
-        ax[0].grid()
+        ax.plot(self.eta, self.f[1, :])
+        ax.set_xlabel(r"$\eta$")
+        ax.set_ylabel("f '")
+        ax.grid()
 
-        ax[1].plot(self.eta, self.f[3, :])
-        ax[1].set_xlabel(r"$\eta$")
-        ax[1].set_ylabel("g")
-        ax[1].grid()
+        # ax[1].plot(self.eta, self.f[3, :])
+        # ax[1].set_xlabel(r"$\eta$")
+        # ax[1].set_ylabel("g")
+        # ax[1].grid()
         plt.show()
 
     def save_profiles(self):
         """ Save in ascii format f, f', f'', theta, dtheta"""
-        filename = __DIROUT__ + "profile_{:01d}.dat".format(self.Pr)
+        filename = __DIROUT__ + "profile_{:01f}.dat".format(self.Pr)
         print(filename)
         var = "#	   eta            f              f'           f''          theta         dtheta"
         header = ("#  Mixed convection heat transfer in the boundary layers on an exponentially stretching surface"
