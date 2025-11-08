@@ -21,7 +21,7 @@ def task_0():
     """
     parameters = dict(eta_max=15,
                    npt=201,
-                   Prandtl=10,
+                   Prandtl=1,
                    a=-1.5,
                    X=1,
                    Hartman=0,

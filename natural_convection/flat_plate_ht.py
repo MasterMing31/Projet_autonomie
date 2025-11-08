@@ -98,7 +98,7 @@ class FlatPlateHT(object):
 
         # Calculate the final solution
         self.eta, self.f = self.solution(self.f2_f4_init)
-        print(self.eta[-1])
+        # print(self.eta[-1])
         if self.plot:
             self.display_profiles()
             self.save_profiles()
