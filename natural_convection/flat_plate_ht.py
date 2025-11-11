@@ -10,7 +10,7 @@ import os
 from tabulate import tabulate
 
 
-class FlatPlateHT(object):
+class FlatPlateMHD(object):
     """
     solves the heat transfer around a flat plate for different Prandtl numbers
 
@@ -39,46 +39,20 @@ class FlatPlateHT(object):
         self.verbose = par["verbose"]
         self.plot = par["plot"]
 
-        # filename = "flat_plate_guesses_1.dat"
-        # script_dir = os.path.dirname(__file__)
-        # src_dir = os.path.dirname(script_dir)
-        # data_dir = os.path.join(src_dir, "data")
-        # file_path = os.path.join(data_dir, filename)
-
-        # if os.path.exists(file_path):
-        #     data = np.loadtxt(file_path, skiprows=2)
-        #     prandtl_list = data[:, 0]
-        #     df2, dg = None, None
-
-        #     for i in range(len(prandtl_list)):
-        #         if float(self.Pr) == prandtl_list[i]:
-        #             df2 = data[i, 1]
-        #             dg = data[i, 2]
-
-        #     self.f2_f4_init_guess = np.array([df2, dg])
-        # else:
         self.f2_f4_init_guess = np.array(par["f2_f4_init_guess"]) 
 
-        self.ratio = 10.            # to set the minimum step for a geometric grid
-        # variables declaration
         self.eta = None
         self.f = None
         self.f2_f4_init = None
         self.deta_min = 0
         self.output = None
 
-
     def set_grid(self):
         """
         grid
         """
-        if self.grid == "geometric":
-            self.deta_min = self.eta_max / (self.ratio * (self.npt - 1))
-            self.eta = np.hstack((0, np.geomspace(self.deta_min, self.eta_max, self.npt-1)))
-            self.eta[-1] = self.eta_max   # necessary because of the round-off error
-        else:
-            self.eta = np.linspace(0, self.eta_max, self.npt)
-            self.deta_min = self.eta[1] - self.eta[0]
+        self.eta = np.linspace(0, self.eta_max, self.npt)
+        self.deta_min = self.eta[1] - self.eta[0]
 
     def guess_optimization(self):
         self.set_grid()
@@ -102,13 +76,13 @@ class FlatPlateHT(object):
         # Calculate the final solution
         self.eta, self.f = self.solution(self.f2_f4_init)
         if self.case == 1:
-            self.save_profiles(filename=__DIROUT__ + f"case_1_profile_a={self.a}_Pr={str(self.Pr)}.dat")
+            self.save_profiles(filename=__DIROUT__ + f"case_1_a={self.a}_Pr={self.Pr}.dat")
         elif self.case == 2:
             self.save_profiles(filename=__DIROUT__ + f"case_2_HaRe={self.M}.dat")
         elif self.case == 3:
             self.save_profiles(filename=__DIROUT__ + f"case_3_a={self.a}.dat")
-        elif self.case == 3:
-            self.save_profiles(filename=__DIROUT__ + f"case_3_X={self.X}.dat")
+        elif self.case == 4:
+            self.save_profiles(filename=__DIROUT__ + f"case_4_X={self.X}.dat")
 
 
 

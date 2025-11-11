@@ -20,12 +20,14 @@ class Graphics(object):
     """
     new class to make nice plots
     """
-    def __init__(self, case, M):
+    def __init__(self, case):
         """ initialisation """
+        self.case = case
         if case == 1:
-            self.filename = __DIROUT__ + "case_1_profile_a=-0.5_Pr=0.5.dat"
+            self.filename = __DIROUT__ + "case_1_a=-0.5_Pr=0.5.dat"
         elif case == 2:
-            self.filename = __DIROUT__ + f"case_2_HaRe={M}.dat"
+            # self.filename = __DIROUT__ + f"case_2_HaRe={M}.dat"
+            self.files = glob.glob(os.path.join(__DIROUT__, "case_2_HaRe=*"))
         # self.plot_options = plot_options
 
         
@@ -50,8 +52,8 @@ class Graphics(object):
             self.table_d2f0()
             pass
         elif task == 2:
-            self.plots_df(self.filename)
-            self.plots_dtheta(self.filename)
+            self.plots_df()
+            self.plots_dtheta()
         # elif task == 3:
         # elif task == 4:
   
@@ -162,17 +164,27 @@ class Graphics(object):
         print(tabulate(rows, headers=headers, tablefmt="fancy_grid"))
         return a_values, Pr_values, table
 
-    def plots_df(self, filename):
+    def plots_df(self):
         """
         make plots
         """
-        files = glob.glob(os.path.join(__DIROUT__, "case_2_HaRe=*"))
         data = []
-        for file in files:
-            M_str = file.split('=')[1].replace('.dat', '')   
-            M = float(M_str)
+        for file in self.files:
+            if self.case == 2:
+                M_str = file.split('=')[1].replace('.dat', '')   
+                M = float(M_str)
+                label = f"$Ha²/Re = {M}$"
+            elif self.case == 3:
+                a_str = file.split('=')[1].replace('.dat', '')   
+                a = float(a_str)
+                label = f"$a = {a}$"
+            elif self.case == 4:
+                X_str = file.split('=')[1].replace('.dat', '')   
+                X = float(X_str)
+                label = f"$X = {X}$"
+
             data = set_data_from_file(file, skiprows=2, vb=False)
-            plt.plot(data[0][:], data[2][:], label=f"$Ha²/Re = {M}$")
+            plt.plot(data[0][:], data[2][:], label=label)
 
         plt.xlabel(r'$\eta$')
         plt.ylabel(r"$f'$", rotation=0)
@@ -181,17 +193,27 @@ class Graphics(object):
         plt.legend()
         plt.show()
 
-    def plots_dtheta(self, filename):
+    def plots_dtheta(self):
         """
         make plots
         """
-        files = glob.glob(__DIROUT__ + "case_2_HaRe=*.dat")
         data = []
-        for file in files:
-            M_str = file.split('=')[1].replace('.dat', '')   # extrait "0.5"
-            M = float(M_str)
+        for file in self.files:
+            if self.case == 2:
+                M_str = file.split('=')[1].replace('.dat', '')   
+                M = float(M_str)
+                label = f"$Ha²/Re = {M}$"
+            elif self.case == 3:
+                a_str = file.split('=')[1].replace('.dat', '')   
+                a = float(a_str)
+                label = f"$a = {a}$"
+            elif self.case == 4:
+                X_str = file.split('=')[1].replace('.dat', '')   
+                X = float(X_str)
+                label = f"$X = {X}$"
+
             data = set_data_from_file(file, skiprows=2, vb=False)
-            plt.plot(data[0][:], data[4][:], label=f"$Ha²/Re = {M}$")
+            plt.plot(data[0][:], data[4][:], label=label)
 
         plt.xlabel(r'$\eta$')
         plt.ylabel(r"$\theta$", rotation=0)

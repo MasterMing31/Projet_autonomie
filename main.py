@@ -5,13 +5,13 @@
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from natural_convection.flat_plate_ht import FlatPlateHT
+from natural_convection.flat_plate_ht import FlatPlateMHD
 from natural_convection.flat_plate_ht_appli import FlatPlateHTAppli
 from natural_convection.grx import Graphics
 from toolbox.colored_messages import *
 
-part = 1
-task = 1
+part = 3
+task = 0
 
 if part == 1:
     if task == 0:
@@ -31,20 +31,20 @@ if part == 1:
                                 plot=False,
                                 case = 1,
                                 f2_f4_init_guess = [-1.4, -0.5],
-                                M=0
+                                M=0 # Ha^2/Re
                                 )
-                s = FlatPlateHT(parameters)
+                s = FlatPlateMHD(parameters)
                 s.solve()
         set_info("normal end of execution")
     
     elif task == 1:
-        g = Graphics(case=1, M=0)
+        g = Graphics(case=1)
         g.run(task=1)
         set_info("normal end of execution")
 
 elif part == 2:
     if task == 0:
-        for M in [0, 1, 3, 5, 8, 10]:
+        for M in [0, 1, 3, 5, 8]:
             parameters = dict(eta_max=7.1,
                             npt=201,
                             Prandtl=1,
@@ -59,14 +59,14 @@ elif part == 2:
                             plot=False,
                             case = 2,
                             f2_f4_init_guess = [-1.14, 1.],
-                            M = M
+                            M = M # Ha^2/Re
                             )
-            s = FlatPlateHT(parameters)
+            s = FlatPlateMHD(parameters)
             s.solve()
         set_info("normal end of execution")
     
     elif task == 1:
-        g = Graphics(case=2, M=0)
+        g = Graphics(case=2)
         g.run(task=2)
         plt.show()
         set_info("normal end of execution")
@@ -79,7 +79,7 @@ elif part == 3:
                         Prandtl=1,
                         a=a,
                         X=1.5,
-                        Hartman=None,
+                        Eckert=0.1,
                         Grashof=2,
                         Lambda=0.1,
                         method=1,
@@ -90,7 +90,7 @@ elif part == 3:
                         f2_f4_init_guess = [-1.14, 1.],
                         M = 0.5 # Ha^2/Re
                         )
-            s = FlatPlateHT(parameters)
+            s = FlatPlateMHD(parameters)
             s.solve()
         set_info("normal end of execution")
     
@@ -115,11 +115,11 @@ elif part == 4:
                         grid="geometric",
                         verbose=False,
                         plot=True,
-                        case = 3,
+                        case = 4,
                         f2_f4_init_guess = [-1.14, 1.],
                         M = 0.5 # Ha^2/Re
                         )
-            s = FlatPlateHT(parameters)
+            s = FlatPlateMHD(parameters)
             s.solve()
         set_info("normal end of execution")
     

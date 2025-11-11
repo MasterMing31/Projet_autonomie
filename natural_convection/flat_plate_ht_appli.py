@@ -1,6 +1,6 @@
 import numpy as np
 from toolbox.colored_messages import set_line
-from natural_convection.flat_plate_ht import FlatPlateHT
+from natural_convection.flat_plate_ht import FlatPlateMHD
 from toolbox.constantes import __DIROUT__
 import matplotlib.pyplot as plt
 
