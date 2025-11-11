@@ -26,21 +26,15 @@ class Graphics(object):
         if case == 1:
             self.filename = __DIROUT__ + "case_1_a=-0.5_Pr=0.5.dat"
         elif case == 2:
-            # self.filename = __DIROUT__ + f"case_2_HaRe={M}.dat"
-            self.files = glob.glob(os.path.join(__DIROUT__, "case_2_HaRe=*"))
-        # self.plot_options = plot_options
+            self.files = glob.glob(os.path.join(__DIROUT__, "case_2_M=*"))
+        elif case == 3:
+            self.files = glob.glob(os.path.join(__DIROUT__, "case_3_a=*"))
+        elif case == 4:
+            self.files = glob.glob(os.path.join(__DIROUT__, "case_4_X=*"))
 
-        
-        # self.files = ["cf_positive_beta.dat", "cf_negative_beta.dat"]
-        # for f in self.files:
-        # self.filename.append(__DIR__ + f)
         self.data = None
-        self.beta_ref = []
-        self.profiles_list = None
-        self.dict_profiles = None
         self.eta = None
         self.plot_params = None
-        self.index_beta = []
         
         # self.initiate_plot_params()
 
@@ -54,7 +48,9 @@ class Graphics(object):
         elif task == 2:
             self.plots_df()
             self.plots_dtheta()
-        # elif task == 3:
+        elif task == 3:
+            # self.characteristics()
+            pass
         # elif task == 4:
   
         else:
@@ -221,3 +217,5 @@ class Graphics(object):
         plt.grid()
         plt.legend()
         plt.show()
+
+    def 
