@@ -102,11 +102,19 @@ class FlatPlateHT(object):
         # Calculate the final solution
         self.eta, self.f = self.solution(self.f2_f4_init)
         if self.case == 1:
-            self.save_profiles(filename = __DIROUT__ + f"case_1_profile_a={self.a}_Pr={str(self.Pr)}.dat")
+            self.save_profiles(filename=__DIROUT__ + f"case_1_profile_a={self.a}_Pr={str(self.Pr)}.dat")
         elif self.case == 2:
-            self.save_profiles(filename = __DIROUT__ + f"case_2_HaRe={self.M}.dat")
-        self.set_characteristics(self.eta, self.f)
-        self.get_characteristics()
+            self.save_profiles(filename=__DIROUT__ + f"case_2_HaRe={self.M}.dat")
+        elif self.case == 3:
+            self.save_profiles(filename=__DIROUT__ + f"case_3_a={self.a}.dat")
+        elif self.case == 3:
+            self.save_profiles(filename=__DIROUT__ + f"case_3_X={self.X}.dat")
+
+
+
+
+        # self.set_characteristics(self.eta, self.f)
+        # self.get_characteristics()
             
         
         # if self.plot:
