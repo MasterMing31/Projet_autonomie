@@ -27,14 +27,11 @@ class FlatPlateHT(object):
         self.Pr = par["Prandtl"]
         self.a = par["a"]
         self.X = par["X"]
-        self.Ha = par["Hartman"]
         self.Ec = par["Eckert"]
         self.Gr = par["Grashof"]
         self.lbda = par["Lambda"]
-        self.Re = par["Reynolds"]
         self.case = par["case"]
-        self.M = np.ceil(self.Ha**2 / self.Re)
-        self.M = par["M"] if "M" in par else self.M
+        self.M = par["M"]
 
         if par["method"] >= 5:
             raise ValueError("parameter 'method'  must be lower than  5")

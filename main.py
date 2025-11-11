@@ -22,11 +22,9 @@ if part == 1:
                                 Prandtl=Pr,
                                 a=a,
                                 X=1,
-                                Hartman=0,
                                 Eckert=0,
                                 Grashof=0,
                                 Lambda=0,
-                                Reynolds=1,
                                 method=1,
                                 grid="geometric",
                                 verbose=False,
@@ -52,11 +50,9 @@ elif part == 2:
                             Prandtl=1,
                             a=-1.5,
                             X=1.5,
-                            Hartman=np.sqrt(M),
                             Eckert=0.1,
                             Grashof=2,
                             Lambda=0.1,
-                            Reynolds=1,
                             method=1,
                             grid="geometric",
                             verbose=False,
@@ -84,10 +80,8 @@ elif part == 3:
                         a=a,
                         X=1.5,
                         Hartman=None,
-                        Eckert=0,
-                        Grashof=0,
-                        Lambda=0,
-                        Reynolds=1,
+                        Grashof=2,
+                        Lambda=0.1,
                         method=1,
                         grid="geometric",
                         verbose=False,
@@ -106,7 +100,34 @@ elif part == 3:
         plt.show()
         set_info("normal end of execution")
 
-        
+elif part == 3:
+    if task == 1:
+        for X in [0.1, 1, 5]:
+            parameters = dict(eta_max=15,
+                        npt=201,
+                        Prandtl=1,
+                        a=2,
+                        X=X,
+                        Eckert=0.1,
+                        Grashof=2,
+                        Lambda=0.1,
+                        method=1,
+                        grid="geometric",
+                        verbose=False,
+                        plot=True,
+                        case = 3,
+                        f2_f4_init_guess = [-1.14, 1.],
+                        M = 0.5 # Ha^2/Re
+                        )
+            s = FlatPlateHT(parameters)
+            s.solve()
+        set_info("normal end of execution")
+    
+    elif task == 1:
+        g = Graphics(case=3, M=0)
+        g.run(task=2)
+        plt.show()
+        set_info("normal end of execution")
 
 
 
