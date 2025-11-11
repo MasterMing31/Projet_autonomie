@@ -1,6 +1,7 @@
 from toolbox.colored_messages import set_title
 
-title = """  FALKNER-SKAN BOUNDARY LAYER 
-               M2 Project, TLSE 3, 2022 
+title = """  Mixed Convection Heat Transfer with Magnetic Field
+        M2 MSME, Université de Toulouse
+        2025 
         """
 set_title(title)

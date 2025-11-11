@@ -22,7 +22,7 @@ def set_data_from_file(filename, unpack=False, skiprows=1, vb=True):
     # be careful with unpack, check at each time,
     """
     with open(filename, "r") as infile:
-        data = np.loadtxt(infile, dtype=float, unpack=unpack, skiprows=skiprows)
+        data = np.loadtxt(infile, dtype=float, unpack=True, skiprows=skiprows)
         if vb:
             print("file name   : ", filename)
             print("data shape  : ", data.shape)

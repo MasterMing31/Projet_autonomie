@@ -93,6 +93,15 @@ def set_section(msg):
     print('#', 50 * '=', '\n')
     sys.stdout.write(RESET)
 
+def set_table(msg):
+    """Set a table message"""
+    print()
+    sys.stdout.write(CYAN)
+    print('#', 50 * '-')
+    print('# Table :  %s' % msg)
+    print('#', 50 * '-', '\n')
+    sys.stdout.write(RESET)
+
 
 def set_alert(msg):
     """Set an alert message"""
@@ -105,7 +114,7 @@ def set_alert(msg):
 
 
 def set_info(msg, char="=", color="red"):
-    """Set a information"""
+    """Set an information"""
     print()
 
     sys.stdout.write(__dic_color__[color])
